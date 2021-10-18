@@ -4,7 +4,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 from vit_train import vit_train
-
+from five_class_setup import five_class_setup
 
 
 
@@ -12,5 +12,7 @@ from vit_train import vit_train
 if __name__ == '__main__':
 
     vit_train()
+    #five_class_setup()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+

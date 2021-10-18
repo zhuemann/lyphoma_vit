@@ -11,6 +11,8 @@ import torchvision.transforms as transforms
 
 import timm
 
+from five_class_setup import five_class_setup
+
 import gc
 import os
 import time
@@ -140,6 +142,8 @@ def vit_train():
     df['image_id'] = neg_files
     df['label'] = labels
 
+    df = five_class_setup()
+
     train_df, valid_df = model_selection.train_test_split(
         df, test_size=0.1, random_state=42, stratify=df.label.values
     )
@@ -164,7 +168,7 @@ def vit_train():
         ]
     )
 
-    model = ViTBase16(n_classes=2, pretrained=True)
+    model = ViTBase16(n_classes=5, pretrained=True)
 
     # Start training processes
     device = torch.device("cuda")
@@ -278,13 +282,7 @@ class ViTBase16(nn.Module):
             # forward pass: compute predicted outputs by passing inputs to the model
             output = self.forward(data)
             #output = torch.squeeze(output)
-            print("output:")
-            print(output)
-            print("target")
-            print(target)
 
-            print("max of output")
-            print(output.argmax(dim=1))
 
             #target = target.float()
             # calculate the batch loss
@@ -318,10 +316,6 @@ class ViTBase16(nn.Module):
             with torch.no_grad():
                 # forward pass: compute predicted outputs by passing inputs to the model
                 output = self.model(data)
-                print("output")
-                print(output)
-                print("target")
-                print(target)
                 # calculate the batch loss
                 loss = criterion(output, target)
                 # Calculate Accuracy
